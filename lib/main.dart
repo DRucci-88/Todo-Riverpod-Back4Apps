@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:parse_learning/my_home_page.dart';
+import 'package:parse_learning/todo_app.dart';
+import 'package:parse_learning/todo_riverpod_app.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const keyApplicationId = '9byfRQirTEdsBSRxjvEz7771CZAwH5tvROSKgci7';
+  const keyClientKey = 'sYGxu5fWpiWsX8jA56oZYbqYJRJEbaJFS7iTJ8LS';
+  const keyParseServerUrl = 'https://parseapi.back4app.com';
+
+  await Parse().initialize(
+    keyApplicationId,
+    keyParseServerUrl,
+    clientKey: keyClientKey,
+    autoSendSessionId: true,
+    debug: true,
+  );
+
+  // ParseObject firstObject = ParseObject('FirstClass')
+  //   ..set('message', 'Hey first message. Parse is now connected');
+  // // firstObject.f
+  // await firstObject.save();
+
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,53 +39,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      home: const TodoRiverpodApp(),
+      // home: const TodoApp(),
+      // home: const MyHomePage(),
     );
   }
 }
